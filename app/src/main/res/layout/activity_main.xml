@@ -18,7 +18,7 @@
             android:backgroundTint="@color/white"
             android:layout_gravity="center|end"
             android:textColor="@color/black"
-            android:textSize="60sp"/>
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/textResult"

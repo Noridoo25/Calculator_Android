@@ -3,6 +3,7 @@ package hcmute.edu.vn.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,13 +23,17 @@ public class MainActivity extends AppCompatActivity {
 
     String status=null;
 
-    String history, result;
+    String history, result, dau;
 
     boolean isEqual=false;
 
     boolean dot=true;
 
     boolean del=true;
+
+    boolean fistNumber=true;
+
+    boolean fistTime=true;
 
     String pattern="###,###,###.###";
 
@@ -79,32 +84,21 @@ public class MainActivity extends AppCompatActivity {
             if((isEqual)){
                 history=textHistory.getText().toString();
                 result=textResult.getText().toString();
-                textHistory.setText((history+"+"));
-            }else {
-                history=textHistory.getText().toString();
-                result=textResult.getText().toString();
+                textHistory.setText((result+"+"));
+
+            }else  {
+                History( );
+
                 textHistory.setText((history+result+"+"));
+
             }
-            if(operator){
-                if(status=="multi"){
-                    Multi();
-                }else{
-                    if(status=="div"){
-                        Div();
-                    }else{
-                        if(status=="minus"){
-                            Minus();
-                        }else{
-                            Plus();
-                        }
-                    }
-                }
-            }
+            Operator( );
             operator=false;
             number=null;
             status="sum";
-            isEqual=false;
             dot=true;
+            isEqual=false;
+            dau="+";
         });
 
         btnMin.setOnClickListener(view -> {
@@ -112,32 +106,18 @@ public class MainActivity extends AppCompatActivity {
             if((isEqual)){
                 history=textHistory.getText().toString();
                 result=textResult.getText().toString();
-                textHistory.setText((history+"-"));
+                textHistory.setText((result+"-"));
             }else {
-                history=textHistory.getText().toString();
-                result=textResult.getText().toString();
+                History();
                 textHistory.setText((history+result+"-"));
             }
-            if(operator){
-                if(status=="multi"){
-                    Multi();
-                }else{
-                    if(status=="div"){
-                        Div();
-                    }else{
-                        if(status=="sum"){
-                            Plus();
-                        }else{
-                            Minus();
-                        }
-                    }
-                }
-            }
+            Operator( );
             operator=false;
             number=null;
             status="minus";
             isEqual=false;
             dot=true;
+            dau="-";
         });
 
         btnMulti.setOnClickListener(view -> {
@@ -145,32 +125,18 @@ public class MainActivity extends AppCompatActivity {
             if((isEqual)){
                 history=textHistory.getText().toString();
                 result=textResult.getText().toString();
-                textHistory.setText((history+"*"));
+                textHistory.setText((result+"*"));
             }else {
-                history=textHistory.getText().toString();
-                result=textResult.getText().toString();
+                History();
                 textHistory.setText((history+result+"*"));
             }
-            if(operator){
-                if(status=="minus"){
-                    Minus();
-                }else{
-                    if(status=="div"){
-                        Div();
-                    }else{
-                        if(status=="sum"){
-                            Plus();
-                        }else{
-                            Multi();
-                        }
-                    }
-                }
-            }
+            Operator();
             operator=false;
             number=null;
             status="multi";
             isEqual=false;
             dot=true;
+            dau="*";
         });
 
         btnDiv.setOnClickListener(view -> {
@@ -178,62 +144,69 @@ public class MainActivity extends AppCompatActivity {
             if((isEqual)){
                 history=textHistory.getText().toString();
                 result=textResult.getText().toString();
-                textHistory.setText((history+"/"));
-            }else {
-                history=textHistory.getText().toString();
-                result=textResult.getText().toString();
+                textHistory.setText((result+"/"));
+            }else{
+                History( );
                 textHistory.setText((history+result+"/"));
             }
-            if(operator){
-                if(status=="multi"){
-                    Multi();
-                }else{
-                    if(status=="minus"){
-                        Minus();
-                    }else{
-                        if(status=="sum"){
-                            Plus();
-                        }else{
-                            Div();
-                        }
-                    }
-                }
-            }
+            Operator();
+
             operator=false;
             number=null;
             status="div";
             isEqual=false;
             dot=true;
+            dau="/";
         });
 
         btnEqual.setOnClickListener(view -> {
+            if(!isEqual){
 
-            history=textHistory.getText().toString();
-            result=textResult.getText().toString();
-            textHistory.setText((history+result));
+                history=textHistory.getText().toString();
+                result=textResult.getText().toString();
+                textHistory.setText((history + result +" "+dau));
 
-            if(operator){
+
+//                if(operator){
+//                    if(status=="multi"){
+//                        Multi();
+//                    }else{
+//                        if(status=="div"){
+//                            Div();
+//                        }else{
+//                            if(status=="minus"){
+//                                Minus();
+//                            }else
+//                            if(status=="sum"){
+//
+//                                Plus();
+//                            }else {
+//                                firstnumber=Double.parseDouble(textResult.getText().toString());
+//                            }
+//                        }
+//                    }
+//                }
                 if(status=="multi"){
                     Multi();
-                }else{
-                    if(status=="div"){
+                }else {
+                    if (status == "div") {
                         Div();
-                    }else{
-                        if(status=="minus"){
+                    } else {
+                        if (status == "minus") {
                             Minus();
-                        }else
-                            if(status=="sum"){
+                        } else if (status == "sum") {
 
                             Plus();
-                        }else {
-                                firstnumber=Double.parseDouble(textResult.getText().toString());
-                            }
+                        }
                     }
                 }
+                operator=false;
+//                isEqual=true;
+                dot=false;
+                fistNumber = true;
             }
-            operator=false;
-            isEqual=true;
-            dot=false;
+
+
         });
 
         btnAC.setOnClickListener(view -> {
@@ -241,17 +214,22 @@ public class MainActivity extends AppCompatActivity {
             operator=false;
             textResult.setText("0");
             textHistory.setText("");
+
+            status=null;
             firstnumber=0;
             lastnumber=0;
             dot=true;
             del=true;
-
+            fistNumber = true;
+            isEqual=false;
+            fistTime=true;
         });
 
         btnDel.setOnClickListener(view -> {
 
             if(del){
                 textResult.setText("0");
+                fistNumber = true;
             }
             else
             {
@@ -292,31 +270,88 @@ public class MainActivity extends AppCompatActivity {
 
         if(number==null){
             number=view;
-        }
-        else
+            if(view !="0"){
+                fistNumber = false;
+            }
+
+        } else if ((isEqual && operator==false)) {
+            firstnumber =0;
+            history = null;
+            number=view;
+        } else
         {
-            number=number+view;
+            if(fistNumber){
+                if(number == "0"){
+                    number = view;
+                    fistNumber = false;
+                }
+                else{
+                    number=number+view;
+                    fistNumber = false;
+                }
+            }
+            else{
+                number=number+view;
+                fistNumber = false;
+            }
+
+
         }
         textResult.setText(number);
         operator=true;
         del=false;
         btnDel.setClickable(true);
-    }
 
+    }
+    public void History(){
+        if( status == null && number==null && fistNumber){
+            history=textHistory.getText().toString();
+            result=textResult.getText().toString();
+        }
+        else if(operator){
+            history=textHistory.getText().toString();
+            result=textResult.getText().toString();
+        }
+
+    }
+    public void Operator(){
+        if(operator){
+            if(status=="minus"){
+
+                Minus();
+            }
+            else if(status=="div"){
+
+                Div();
+            }
+            else if(status=="sum"){
+
+                Plus();
+            }
+            else {
+
+                Multi();
+            }
+
+        }
+
+    }
     public void Minus(){
-        if(firstnumber==0){
-            firstnumber=Double.parseDouble(textResult.getText().toString());
-        }
-        else
-        {
-            lastnumber= Double.parseDouble(textResult.getText().toString());
-            firstnumber=firstnumber-lastnumber;
-        }
+//        if(fistTime){
+//            firstnumber=Double.parseDouble(textResult.getText().toString());
+//            fistTime =false;
+//        }
+//        else
+//        {
+//            lastnumber= Double.parseDouble(textResult.getText().toString());
+//            firstnumber=firstnumber-lastnumber;
+//        }
+        lastnumber= Double.parseDouble(textResult.getText().toString());
+        firstnumber=firstnumber-lastnumber;
         textResult.setText(decimalFormat.format(firstnumber));
     }
 
     public void Plus(){
-
         lastnumber=Double.parseDouble(textResult.getText().toString());
         firstnumber=firstnumber+lastnumber;
         textResult.setText(decimalFormat.format(firstnumber));
@@ -324,8 +359,9 @@ public class MainActivity extends AppCompatActivity {
 
     public  void Multi(){
 
-        if(firstnumber==0){
+        if(fistTime){
             firstnumber=1;
+            fistTime=false;
         }
         lastnumber=Double.parseDouble(textResult.getText().toString());
         firstnumber=firstnumber*lastnumber;
@@ -334,15 +370,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void Div(){
 
-        if(firstnumber==0){
+        if(fistTime){
             lastnumber=Double.parseDouble(textResult.getText().toString());
             firstnumber=lastnumber;
+            fistTime = false;
         }
         else
         {
             lastnumber=Double.parseDouble(textResult.getText().toString());
             firstnumber=firstnumber/lastnumber;
         }
+
         textResult.setText(decimalFormat.format(firstnumber));
     }
 }
