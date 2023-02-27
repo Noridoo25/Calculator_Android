@@ -38,7 +38,43 @@ public class MainActivity extends AppCompatActivity {
     String pattern="###,###,###.###";
 
     DecimalFormat decimalFormat=new DecimalFormat();
+    public void numberclick(String view) {
 
+        if(number==null){
+            number=view;
+            if(view !="0"){
+                fistNumber = false;
+            }
+
+        } else if ((isEqual && operator==false)) {
+            firstnumber =0;
+            history = null;
+            number=view;
+        } else
+        {
+            if(fistNumber){
+                if(number == "0"){
+                    number = view;
+                    fistNumber = false;
+                }
+                else{
+                    number=number+view;
+                    fistNumber = false;
+                }
+            }
+            else{
+                number=number+view;
+                fistNumber = false;
+            }
+
+
+        }
+        textResult.setText(number);
+        operator=true;
+        del=false;
+        btnDel.setClickable(true);
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +115,22 @@ public class MainActivity extends AppCompatActivity {
         btn8.setOnClickListener(view -> numberclick("8"));
         btn9.setOnClickListener(view -> numberclick("9"));
 
+
+        btnAC.setOnClickListener(view -> {
+            number=null;
+            operator=false;
+            textResult.setText("0");
+            textHistory.setText("");
+
+            status=null;
+            firstnumber=0;
+            lastnumber=0;
+            dot=true;
+            del=true;
+            fistNumber = true;
+            isEqual=false;
+            fistTime=true;
+        });
         btnPlus.setOnClickListener(view -> {
 
             if((isEqual)){
@@ -162,30 +214,10 @@ public class MainActivity extends AppCompatActivity {
         btnEqual.setOnClickListener(view -> {
             if(!isEqual){
 
+                dau = "=";
                 history=textHistory.getText().toString();
                 result=textResult.getText().toString();
                 textHistory.setText((history + result +" "+dau));
-
-
-//                if(operator){
-//                    if(status=="multi"){
-//                        Multi();
-//                    }else{
-//                        if(status=="div"){
-//                            Div();
-//                        }else{
-//                            if(status=="minus"){
-//                                Minus();
-//                            }else
-//                            if(status=="sum"){
-//
-//                                Plus();
-//                            }else {
-//                                firstnumber=Double.parseDouble(textResult.getText().toString());
-//                            }
-//                        }
-//                    }
-//                }
                 if(status=="multi"){
                     Multi();
                 }else {
@@ -201,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 operator=false;
-//                isEqual=true;
+                isEqual=true;
                 dot=false;
                 fistNumber = true;
             }
@@ -209,21 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        btnAC.setOnClickListener(view -> {
-            number=null;
-            operator=false;
-            textResult.setText("0");
-            textHistory.setText("");
 
-            status=null;
-            firstnumber=0;
-            lastnumber=0;
-            dot=true;
-            del=true;
-            fistNumber = true;
-            isEqual=false;
-            fistTime=true;
-        });
 
         btnDel.setOnClickListener(view -> {
 
@@ -266,43 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void numberclick(String view) {
 
-        if(number==null){
-            number=view;
-            if(view !="0"){
-                fistNumber = false;
-            }
-
-        } else if ((isEqual && operator==false)) {
-            firstnumber =0;
-            history = null;
-            number=view;
-        } else
-        {
-            if(fistNumber){
-                if(number == "0"){
-                    number = view;
-                    fistNumber = false;
-                }
-                else{
-                    number=number+view;
-                    fistNumber = false;
-                }
-            }
-            else{
-                number=number+view;
-                fistNumber = false;
-            }
-
-
-        }
-        textResult.setText(number);
-        operator=true;
-        del=false;
-        btnDel.setClickable(true);
-
-    }
     public void History(){
         if( status == null && number==null && fistNumber){
             history=textHistory.getText().toString();
